@@ -34,7 +34,7 @@ const moveButton = (e) => {
 
     // Change image logic
     if (noBtn.innerText === "Maldito gremlin") {
-        mainImage.src = "PA.jpg";
+        mainImage.src = "https://media.tenor.com/BbSkyx3DaEgAAAAM/goma-sad.gif";
 
         // Transform button into the face
         noBtn.style.backgroundImage = "url('PA.jpg')";
