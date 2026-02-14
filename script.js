@@ -69,7 +69,7 @@ noBtn.addEventListener('mouseover', () => {
     }
 
     // Increase "Yes" button size
-    yesFontSize *= 1.2; // Smaller increment since hover is faster than click
+    yesFontSize *= 1.4; // Smaller increment since hover is faster than click
     yesBtn.style.fontSize = `${yesFontSize}rem`;
 });
 
