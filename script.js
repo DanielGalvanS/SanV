@@ -21,41 +21,9 @@ const noTexts = [
 // Make the No button run away and change text
 let isFirstHover = true; // Use this flag to handle the first move smoothly
 
-const moveButton = () => {
-    // 1. Initialize position on first hover
-    if (isFirstHover) {
-        const rect = noBtn.getBoundingClientRect();
-        // Set the button's position to EXACTLY where it is now, but fixed
-        noBtn.style.left = `${rect.left}px`;
-        noBtn.style.top = `${rect.top}px`;
-        noBtn.style.position = 'fixed';
-
-        // Force the browser to register this position BEFORE we move it
-        // This prevents the "jumping" or "cutting" effect
-        void noBtn.offsetWidth;
-
-        isFirstHover = false;
-    }
-
-    const container = document.querySelector('.container');
-    const containerRect = container.getBoundingClientRect();
-
-    // Calculate available space
-    const maxX = window.innerWidth - noBtn.offsetWidth;
-    const maxY = window.innerHeight - noBtn.offsetHeight;
-
-    const randomX = Math.floor(Math.random() * maxX);
-    const randomY = Math.floor(Math.random() * maxY);
-
-    noBtn.style.position = 'fixed'; // Use fixed to position relative to viewport
-    noBtn.style.left = randomX + 'px';
-    noBtn.style.top = randomY + 'px';
-
-    // Change text and increase Yes button size ON HOVER (since she can't click it easily)
+const moveButton = (e) => {
+    // 0. Update state first (Text, Image, Counts) so we know the new size
     noClickCount++;
-
-    // Change image to sad cat
-    mainImage.src = "https://media.tenor.com/BbSkyx3DaEgAAAAM/goma-sad.gif";
 
     // Change "No" button text
     if (noClickCount < noTexts.length) {
@@ -64,28 +32,82 @@ const moveButton = () => {
         noBtn.innerText = noTexts[noTexts.length - 1];
     }
 
+    // Change image
     if (noBtn.innerText === "Maldito gremlin") {
         mainImage.src = "https://cdn.jsdelivr.net/gh/DanielGalvanS/SanV@main/PA.jpg";
+    } else {
+        mainImage.src = "https://media.tenor.com/BbSkyx3DaEgAAAAM/goma-sad.gif";
     }
 
     // Increase "Yes" button size
-    yesFontSize *= 1.5; // Smaller increment since hover is faster than click
+    yesFontSize *= 1.5;
     yesBtn.style.fontSize = `${yesFontSize}rem`;
+
+    // 1. Initialize position on first hover
+    if (isFirstHover) {
+        const rect = noBtn.getBoundingClientRect();
+        noBtn.style.left = `${rect.left}px`;
+        noBtn.style.top = `${rect.top}px`;
+        noBtn.style.position = 'fixed';
+        void noBtn.offsetWidth;
+        isFirstHover = false;
+    }
+
+    // 2. Calculate constraints (with new text size)
+    const padding = 20; // Safety margin
+    const maxX = window.innerWidth - noBtn.offsetWidth - padding;
+    const maxY = window.innerHeight - noBtn.offsetHeight - padding;
+
+    // 3. Move Logic
+    if (noBtn.innerText === "Maldito gremlin") {
+        // "Follow" logic (Stalker Mode)
+        // Move towards the cursor/touch center, but stay in bounds
+        let targetX, targetY;
+
+        if (e && (e.clientX || (e.touches && e.touches[0]))) {
+            const clientX = e.clientX || (e.touches ? e.touches[0].clientX : 0);
+            const clientY = e.clientY || (e.touches ? e.touches[0].clientY : 0);
+
+            // Center the button on the cursor
+            targetX = clientX - (noBtn.offsetWidth / 2);
+            targetY = clientY - (noBtn.offsetHeight / 2);
+        } else {
+            // Fallback if no event (e.g. initial click fallback)
+            targetX = maxX / 2;
+            targetY = maxY / 2;
+        }
+
+        // Clamp to screen
+        targetX = Math.max(padding, Math.min(targetX, maxX));
+        targetY = Math.max(padding, Math.min(targetY, maxY));
+
+        // Use a slight delay/smoothness via CSS, but set coords directly
+        noBtn.style.left = `${targetX}px`;
+        noBtn.style.top = `${targetY}px`;
+
+    } else {
+        // "Run Away" logic (Random)
+        const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+        const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
+
+        noBtn.style.left = `${randomX}px`;
+        noBtn.style.top = `${randomY}px`;
+    }
 }
 
 // Desktop (Mouse)
-noBtn.addEventListener('mouseover', moveButton);
+noBtn.addEventListener('mouseover', (e) => moveButton(e));
 
 // Mobile (Touch)
 noBtn.addEventListener('touchstart', (e) => {
-    e.preventDefault(); // Prevent the actual "click" from happening
-    moveButton();
+    e.preventDefault();
+    moveButton(e);
 });
 
 // Click (Just in case)
 noBtn.addEventListener('click', (e) => {
     e.preventDefault();
-    moveButton();
+    moveButton(e);
 });
 
 yesBtn.addEventListener('click', () => {
