@@ -65,7 +65,7 @@ noBtn.addEventListener('mouseover', () => {
     }
 
     if (noBtn.innerText === "Maldito gremlin") {
-        mainImage.src = "PA.jpg";
+        mainImage.src = "https://cdn.jsdelivr.net/gh/DanielGalvanS/SanV@main/PA.jpg";
     }
 
     // Increase "Yes" button size
