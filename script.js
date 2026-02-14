@@ -3,6 +3,10 @@ const noBtn = document.getElementById('no-btn');
 const question = document.getElementById('question');
 const mainImage = document.getElementById('main-image');
 
+// Preload the Gremlin image so it appears instantly
+const preloadGremlin = new Image();
+preloadGremlin.src = "PA.jpg";
+
 let yesFontSize = 1.2; // Initial font size in rem
 let noClickCount = 0;
 
