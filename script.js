@@ -32,11 +32,37 @@ const moveButton = (e) => {
         noBtn.innerText = noTexts[noTexts.length - 1];
     }
 
-    // Change image
+    // Change image logic
     if (noBtn.innerText === "Maldito gremlin") {
-        mainImage.src = "https://cdn.jsdelivr.net/gh/DanielGalvanS/SanV@main/PA.jpg";
+        mainImage.src = "PA.jpg";
+
+        // Transform button into the face
+        noBtn.style.backgroundImage = "url('PA.jpg')";
+        noBtn.style.backgroundSize = "cover";
+        noBtn.style.backgroundPosition = "center";
+
+        // Make it bigger
+        noBtn.style.width = "150px";
+        noBtn.style.height = "150px";
+        noBtn.style.borderRadius = "50%";
+
+        // Text visibility (white with shadow so it pops)
+        noBtn.style.color = "white";
+        noBtn.style.textShadow = "2px 2px 4px #000000";
+        noBtn.style.fontWeight = "bold";
+        noBtn.style.border = "none";
+
     } else {
         mainImage.src = "https://media.tenor.com/BbSkyx3DaEgAAAAM/goma-sad.gif";
+
+        // Reset styles
+        noBtn.style.backgroundImage = "none";
+        noBtn.style.color = "#ff1e4d";
+        noBtn.style.border = "2px solid #ff1e4d";
+        noBtn.style.width = "auto";
+        noBtn.style.height = "auto";
+        noBtn.style.textShadow = "none";
+        noBtn.style.borderRadius = "50px";
     }
 
     // Increase "Yes" button size
@@ -59,6 +85,8 @@ const moveButton = (e) => {
     const maxY = window.innerHeight - noBtn.offsetHeight - padding;
 
     // 3. Move Logic
+    // "Follow" logic removed as requested to keep "Run Away" behavior consistent
+    // but preserving the "Maldito gremlin" check for future flexibility if needed
     if (noBtn.innerText === "Maldito gremlin") {
         // "Follow" logic (Stalker Mode)
         // Move towards the cursor/touch center, but stay in bounds
