@@ -21,7 +21,7 @@ const noTexts = [
 // Make the No button run away and change text
 let isFirstHover = true; // Use this flag to handle the first move smoothly
 
-noBtn.addEventListener('mouseover', () => {
+const moveButton = () => {
     // 1. Initialize position on first hover
     if (isFirstHover) {
         const rect = noBtn.getBoundingClientRect();
@@ -71,12 +71,21 @@ noBtn.addEventListener('mouseover', () => {
     // Increase "Yes" button size
     yesFontSize *= 1.5; // Smaller increment since hover is faster than click
     yesBtn.style.fontSize = `${yesFontSize}rem`;
+}
+
+// Desktop (Mouse)
+noBtn.addEventListener('mouseover', moveButton);
+
+// Mobile (Touch)
+noBtn.addEventListener('touchstart', (e) => {
+    e.preventDefault(); // Prevent the actual "click" from happening
+    moveButton();
 });
 
-// Optional: Keep click just in case she catches it (mobile?) but logic is duplicated above effectively
-noBtn.addEventListener('click', () => {
-    // If she manages to click it, just do the same thing (run away again? or maybe finalize "No"?)
-    // For now, let's just let the hover handle it.
+// Click (Just in case)
+noBtn.addEventListener('click', (e) => {
+    e.preventDefault();
+    moveButton();
 });
 
 yesBtn.addEventListener('click', () => {
