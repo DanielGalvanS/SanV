@@ -64,6 +64,10 @@ noBtn.addEventListener('mouseover', () => {
         noBtn.innerText = noTexts[noTexts.length - 1];
     }
 
+    if (noBtn.innerText === "Maldito gremlin") {
+        mainImage.src = "PA.jpg";
+    }
+
     // Increase "Yes" button size
     yesFontSize *= 1.2; // Smaller increment since hover is faster than click
     yesBtn.style.fontSize = `${yesFontSize}rem`;
